@@ -108,7 +108,7 @@ app.post('/signup', async (req, res) => {
   await newUser.save();
 
   req.session.user = { name, email };
-  res.redirect('/members');
+  res.redirect('/welcome');
 });
 
 app.post('/login', async (req, res) => {
@@ -135,7 +135,22 @@ app.post('/login', async (req, res) => {
   }
 
   req.session.user = { name: user.name, email: user.email };
-  res.redirect('/members');
+  res.redirect('/welcome');
+});
+
+app.get('/welcome', (req, res) => {
+  if (!req.session.user) {
+    return res.redirect('/');
+  }
+
+  res.send(`
+    <h1>Welcome, ${req.session.user.name}</h1>
+    <p>You have successfully logged in.</p>
+    <form action="/members" method="GET">
+      <button type="submit">Go to Members Area</button>
+    </form>
+    <p><a href="/logout">Logout</a></p>
+  `);
 });
 
 app.get('/members', (req, res) => {
