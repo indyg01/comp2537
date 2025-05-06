@@ -68,8 +68,9 @@ app.get('/signup', (req, res) => {
       Password: <input type="password" name="password" /><br/>
       <button type="submit">Sign Up</button>
     </form>
-    <p><a href="/">Back to Home</a></p>
-  `);
+    <form action="/" method="GET">
+      <button type="submit">Back to Home</button>
+    </form>  `);
 });
 
 app.get('/login', (req, res) => {
@@ -108,7 +109,7 @@ app.post('/signup', async (req, res) => {
   await newUser.save();
 
   req.session.user = { name, email };
-  res.redirect('/welcome');
+  res.redirect('/members');
 });
 
 app.post('/login', async (req, res) => {
@@ -135,7 +136,7 @@ app.post('/login', async (req, res) => {
   }
 
   req.session.user = { name: user.name, email: user.email };
-  res.redirect('/welcome');
+  res.redirect('/members');
 });
 
 app.get('/welcome', (req, res) => {
