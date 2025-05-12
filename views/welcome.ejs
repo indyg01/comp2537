@@ -1,0 +1,10 @@
+<%- include('templates/header') %>
+
+<div class="text-center">
+  <h1 class="mb-4">Welcome, <%= user.name %>!</h1>
+  <p>You have successfully logged in.</p>
+  <a href="/members" class="btn btn-success mt-3">Go to Members Area</a>
+  <a href="/logout" class="btn btn-danger mt-3 ms-2">Logout</a>
+</div>
+
+<%- include('templates/footer') %>

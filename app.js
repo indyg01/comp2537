@@ -10,6 +10,8 @@ const path = require('path');
 const app = express();
 const port = process.env.PORT || 3000;
 
+app.set('view engine', 'ejs');
+
 mongoose.connect(
   `mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_HOST}/${process.env.MONGODB_DATABASE}?retryWrites=true&w=majority`,
   {
@@ -25,12 +27,32 @@ mongoose.connect(
 const userSchema = new mongoose.Schema({
   name: String,
   email: { type: String, unique: true },
-  password: String
+  password: String,
+  user_type: { type: String, default: 'user' }
 });
 const User = mongoose.model('User', userSchema);
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
+
+function sessionValidation(req, res, next) {
+  if (req.session.user) {
+    next();
+  } else {
+    res.redirect('/login');
+  }
+}
+
+function adminAuthorization(req, res, next) {
+  console.log("Admin Auth Check:", req.session.user);
+
+  if (req.session.user?.user_type === 'admin') {
+    next();
+  } else {
+    res.status(403);
+    res.render('errorMessage', { error: "Not Authorized" });
+  }
+}
 
 app.use(session({
   secret: process.env.NODE_SESSION_SECRET,
@@ -46,44 +68,20 @@ app.use(session({
 }));
 
 app.get('/', (req, res) => {
-  if (!req.session.user) {
-    return res.send(`
-      <h1>Home</h1>
-      <p><a href="/signup">Sign Up</a> | <a href="/login">Login</a></p>
-    `);
-  }
+  res.render("index", { user: req.session.user });
+  });
 
-  res.send(`
-    <h1>Welcome, ${req.session.user.name}</h1>
-    <p><a href="/members">Members Area</a> | <a href="/logout">Logout</a></p>
-  `);
-});
+  app.get('/signup', (req, res) => {
+    res.render('signup');
+  });
 
-app.get('/signup', (req, res) => {
-  res.send(`
-    <h1>Sign Up</h1>
-    <form method="POST" action="/signup">
-      Name: <input name="name" /><br/>
-      Email: <input name="email" /><br/>
-      Password: <input type="password" name="password" /><br/>
-      <button type="submit">Sign Up</button>
-    </form>
-    <form action="/" method="GET">
-      <button type="submit">Back to Home</button>
-    </form>  `);
-});
+  app.get('/login', (req, res) => {
+    res.render('login');
+  });
 
-app.get('/login', (req, res) => {
-  res.send(`
-    <h1>Login</h1>
-    <form method="POST" action="/login">
-      Email: <input name="email" /><br/>
-      Password: <input type="password" name="password" /><br/>
-      <button type="submit">Log In</button>
-    </form>
-    <p><a href="/">Back to Home</a></p>
-  `);
-});
+  app.get('/debug', (req, res) => {
+    res.json(req.session.user);
+  });
 
 app.post('/signup', async (req, res) => {
   const schema = Joi.object({
@@ -108,8 +106,12 @@ app.post('/signup', async (req, res) => {
   const newUser = new User({ name, email, password: hashedPassword });
   await newUser.save();
 
-  req.session.user = { name, email };
-  res.redirect('/members');
+  req.session.user = {
+    name: newUser.name,
+    email: newUser.email,
+    user_type: newUser.user_type 
+  };
+  res.redirect('/welcome');
 });
 
 app.post('/login', async (req, res) => {
@@ -125,7 +127,8 @@ app.post('/login', async (req, res) => {
 
   const { email, password } = req.body;
 
-  const user = await User.findOne({ email });
+  const user = await User.findOne({ email }).select('name email password user_type');
+  console.log("MongoDB User:", user);
   if (!user) {
     return res.send(`<p>User not found. <a href="/login">Try again</a></p>`);
   }
@@ -135,8 +138,16 @@ app.post('/login', async (req, res) => {
     return res.send(`<p>Invalid password. <a href="/login">Try again</a></p>`);
   }
 
-  req.session.user = { name: user.name, email: user.email };
-  res.redirect('/members');
+  if (await bcrypt.compare(password, user.password)) {
+    req.session.user = {
+      name: user.name,
+      email: user.email,
+      user_type: user.user_type // ✅ ADD THIS LINE
+    };
+  
+    console.log("SESSION SET:", req.session.user); // Optional
+    return res.redirect('/welcome');
+  }
 });
 
 app.get('/welcome', (req, res) => {
@@ -144,14 +155,7 @@ app.get('/welcome', (req, res) => {
     return res.redirect('/');
   }
 
-  res.send(`
-    <h1>Welcome, ${req.session.user.name}</h1>
-    <p>You have successfully logged in.</p>
-    <form action="/members" method="GET">
-      <button type="submit">Go to Members Area</button>
-    </form>
-    <p><a href="/logout">Logout</a></p>
-  `);
+  res.render("welcome", { user: req.session.user });
 });
 
 app.get('/members', (req, res) => {
@@ -161,14 +165,8 @@ app.get('/members', (req, res) => {
 
   const name = req.session.user.name;
   const images = ['cat1.jpg', 'cat2.jpg', 'cat3.jpg'];
-  const randomImage = images[Math.floor(Math.random() * images.length)];
 
-  res.send(`
-    <h1>Members Area</h1>
-    <p>Hello, ${name}</p>
-    <img src="/${randomImage}" alt="Random" style="max-width: 300px;" />
-    <p><a href="/logout">Logout</a></p>
-  `);
+  res.render("members", { name, images });
 });
 
 app.get('/logout', (req, res) => {
@@ -180,8 +178,23 @@ app.get('/logout', (req, res) => {
   });
 });
 
+app.get('/admin', sessionValidation, adminAuthorization, async (req, res) => {
+  const users = await User.find({}, 'name email user_type');
+  res.render("admin", { users });
+});
+
+app.post('/promote/:email', sessionValidation, adminAuthorization, async (req, res) => {
+  await User.updateOne({ email: req.params.email }, { $set: { user_type: 'admin' } });
+  res.redirect('/admin');
+});
+
+app.post('/demote/:email', sessionValidation, adminAuthorization, async (req, res) => {
+  await User.updateOne({ email: req.params.email }, { $set: { user_type: 'user' } });
+  res.redirect('/admin');
+});
+
 app.use((req, res) => {
-  res.status(404).send('<h1>404 - Page Not Found</h1>');
+  res.status(404).render('404');
 });
 
 app.listen(port, () => {
