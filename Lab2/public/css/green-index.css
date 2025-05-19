@@ -1,0 +1,38 @@
+.container {
+    margin-top:100px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.container a {
+    height: 120px;
+    display: inline-block;
+    padding: 35px 30px;
+    background-color: #14b339;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+.container a span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.container a:hover {
+    background-color: #14812c;
+}
+
+.f20 {
+    font-size: 20px;
+}
+.f30 {
+    font-size: 30px;
+}
+.f40 {
+    font-size: 40px;
+}

@@ -1,0 +1,22 @@
+html, button {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+.container { 
+    max-width: 1000px;
+    margin: auto;
+    padding:50px;
+    display: grid;  /*flex*/
+    grid-template-columns: 1fr;
+    grid-auto-rows: auto;
+    grid-gap: 2px;
+    justify-content: center;
+    align-items: center;
+}
+
+.container p {
+    justify-self: start;
+}
+
+.container h1 {
+    text-align:center;
+} 

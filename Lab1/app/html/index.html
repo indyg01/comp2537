@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Lab 1</title>
+  </head>
+  <body style="color: {{color}}; background-color: {{bg}};">
+    <div style="display: block;">
+      <button id="upButton">Up</button>
+      <h1 id="counter">0</h1>
+      <button id="downButton">Down</button>
+    </div>
+
+    <!-- Settings Button (now directly applies red/blue style) -->
+    <form action="/changeStyle" method="get" style="margin-top: 20px;">
+      <input type="hidden" name="color" value="red">
+      <input type="hidden" name="bg" value="blue">
+      <button type="submit" id="settingsButton">Apply Red on Blue</button>
+    </form>
+
+    <!-- Your counter JS -->
+    <script src="/js/counter.js"></script>
+  </body>
+</html>

@@ -1,0 +1,15 @@
+
+footer {
+    text-align: center;
+    padding: 20px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    font-size: 0.7em;
+    background-color: white;
+}
+
+.img-credit {
+    font-size: 0.6em;
+    color: #555;
+}

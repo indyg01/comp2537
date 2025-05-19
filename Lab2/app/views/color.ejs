@@ -1,0 +1,20 @@
+<%- include('partials/header', { css: css }) %>
+
+<div class="nav-background">
+  <nav class="navbar">
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a class="blue" href="/blue">Blue Pages</a></li>
+      <li><a class="red" href="/red">Red Pages</a></li>
+      <li><a class="green" href="/green">Green Pages</a></li>
+    </ul>
+  </nav>
+</div>
+
+<div class="container">
+  <a class="f20" href="/<%= color %>/20"><span><%= color.charAt(0).toUpperCase() + color.slice(1) %> 20px</span></a>
+  <a class="f30" href="/<%= color %>/30"><span><%= color.charAt(0).toUpperCase() + color.slice(1) %> 30px</span></a>
+  <a class="f40" href="/<%= color %>/40"><span><%= color.charAt(0).toUpperCase() + color.slice(1) %> 40px</span></a>
+</div>
+
+<%- include('partials/footer', { js: js }) %>

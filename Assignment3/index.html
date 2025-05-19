@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pokemon Memory Game</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="index.js" defer></script>
+</head>
+
+<div id="branding">
+  <img src="pokemon-logo.png" alt="Pokémon Logo">
+  <h1>Memory Match Game</h1>
+</div>
+
+<body>
+  <div id="controls">
+    <label for="difficulty">Difficulty:</label>
+    <select id="difficulty">
+      <option value="easy">Easy</option>
+      <option value="medium">Medium</option>
+      <option value="hard">Hard</option>
+    </select>
+
+    <button id="startGame">Start</button>
+    <button id="resetGame">Reset</button>
+    <button id="themeToggle">Switch Theme</button>
+    <button id="powerUp">Power-Up</button>
+  </div>
+
+  <div id="status">
+    <span id="clicks">Clicks: 0</span>
+    <span id="matches">Matches: 0</span>
+    <span id="pairsLeft">Pairs Left: 0</span>
+    <span id="totalPairs">Total Pairs: 0</span>
+    <span id="timer">Time Left: 0s</span>
+  </div>
+
+  <div id="game_grid"></div>
+</body>
+
+</html>

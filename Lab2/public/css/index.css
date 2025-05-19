@@ -1,0 +1,12 @@
+.logo {
+    width: 100px;
+    height: auto;
+    margin: auto;
+}
+
+#dancing-text {
+    padding-top:10px;
+    font-size: 2em;
+    font-weight:bold;
+    text-align: center;
+}

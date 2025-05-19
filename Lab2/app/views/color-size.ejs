@@ -1,0 +1,20 @@
+<%- include('partials/header', { css: css }) %>
+
+<div class="nav-background">
+  <nav class="navbar">
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a class="blue" href="/blue">Blue Pages</a></li>
+      <li><a class="red" href="/red">Red Pages</a></li>
+      <li><a class="green" href="/green">Green Pages</a></li>
+    </ul>
+  </nav>
+</div>
+
+<div class="container">
+  <h1><%= color.charAt(0).toUpperCase() + color.slice(1) %> Pages</h1>
+  <p>Font <%= size %> px</p>
+  <button id="myButton">Click to make me <%= color.charAt(0).toUpperCase() + color.slice(1) %>!</button>
+</div>
+
+<%- include('partials/footer', { js: js }) %>
