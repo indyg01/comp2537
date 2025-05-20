@@ -171,10 +171,9 @@ $(document).ready(function () {
   });
 
   $("#powerUp").on("click", function () {
-  $(".card").addClass("flip"); // Flip everything
+  $(".card").addClass("flip");
 
   setTimeout(() => {
-    // Only remove flip on unmatched cards
     $(".card").not(".matched").removeClass("flip");
   }, 2000);
 });
