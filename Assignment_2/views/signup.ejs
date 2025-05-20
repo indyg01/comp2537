@@ -1,0 +1,26 @@
+<%- include('templates/header') %>
+
+<h1 class="mb-4">Sign Up</h1>
+
+<form method="POST" action="/signup">
+  <div class="mb-3">
+    <label for="name" class="form-label">Name:</label>
+    <input class="form-control" type="text" id="name" name="name" required />
+  </div>
+
+  <div class="mb-3">
+    <label for="email" class="form-label">Email:</label>
+    <input class="form-control" type="email" id="email" name="email" required />
+  </div>
+
+  <div class="mb-3">
+    <label for="password" class="form-label">Password:</label>
+    <input class="form-control" type="password" id="password" name="password" required />
+  </div>
+
+  <button class="btn btn-primary" type="submit">Sign Up</button>
+</form>
+
+<a class="btn btn-link mt-3" href="/">Back to Home</a>
+
+<%- include('templates/footer') %>

@@ -1,0 +1,13 @@
+<tr>
+    <td><%= user.name %></td>
+    <td><%= user.email %></td>
+    <td><%= user.user_type %></td>
+    <td>
+        <form method="POST" action="/promote/<%= user.email %>" class="d-inline">
+            <button type="submit" class="btn btn-success btn-sm">Promote to Admin</button>
+        </form>
+        <form method="POST" action="/demote/<%= user.email %>" class="d-inline ms-2">
+            <button type="submit" class="btn btn-warning btn-sm">Demote to User</button>
+        </form>
+    </td>
+</tr>

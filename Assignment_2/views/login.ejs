@@ -1,0 +1,23 @@
+<%- include('templates/header') %>
+
+<h1 class="mb-4">Login</h1>
+
+<form method="POST" action="/login" class="needs-validation" novalidate>
+  <div class="mb-3">
+    <label for="email" class="form-label">Email:</label>
+    <input type="email" class="form-control" id="email" name="email" required>
+    <div class="invalid-feedback">Please enter a valid email address.</div>
+  </div>
+
+  <div class="mb-3">
+    <label for="password" class="form-label">Password:</label>
+    <input type="password" class="form-control" id="password" name="password" required>
+    <div class="invalid-feedback">Please enter your password.</div>
+  </div>
+
+  <button type="submit" class="btn btn-primary">Log In</button>
+</form>
+
+<a href="/" class="btn btn-link mt-3">Back to Home</a>
+
+<%- include('templates/footer') %>

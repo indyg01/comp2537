@@ -1,0 +1,18 @@
+<%- include('templates/header') %>
+
+<h1 class="mb-4">Hello, <%= name %></h1>
+<p>Welcome to the members area!</p>
+
+<div class="row row-cols-1 row-cols-md-3 g-4 mt-4">
+  <% images.forEach(img => { %>
+    <div class="col">
+      <div class="card h-100">
+        <img src="/<%= img %>" class="card-img-top" alt="Member image">       
+      </div>
+    </div>
+  <% }) %>
+</div>
+
+<a href="/logout" class="btn btn-danger mt-4">Logout</a>
+
+<%- include('templates/footer') %>
